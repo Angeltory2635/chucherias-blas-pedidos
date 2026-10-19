@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedidos | Chucherías Blas</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      color: #292929;
+      background: #fff;
+    }
+    main { max-width: 900px; margin: auto; }
+    h1 { color: #a94313; font-size: 26px; }
+    h2 { margin-top: 30px; border-bottom: 2px solid #f1d2bd; padding-bottom: 8px; }
+    .resumen {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #fff0e4;
+      margin-bottom: 24px;
+    }
+    .dato { flex: 1; min-width: 150px; }
+    .dato strong {
+      display: block;
+      margin-top: 8px;
+      color: #a94313;
+      font-size: 24px;
+    }
+    .productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 14px;
+    }
+    .producto {
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid #e4e4e4;
+      border-radius: 14px;
+    }
+    .foto {
+      min-height: 95px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: #f7f7f7;
+      color: #777;
+      font-size: 12px;
+    }
+    .nombre { font-weight: bold; margin: 12px 0 7px; }
+    .detalle { font-size: 12px; color: #666; }
+    .precio { margin: 10px 0; font-weight: bold; color: #a94313; }
+    .controles { display: flex; justify-content: center; align-items: center; gap: 14px; }
+    button {
+      width: 36px; height: 36px;
+      border: 0; border-radius: 8px;
+      background: #a94313; color: white;
+      font-size: 22px; cursor: pointer;
+    }
+    .cantidad { min-width: 18px; font-weight: bold; }
+    .aviso { color: #666; font-size: 13px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Chucherías Blas</h1>
+  <p>Selecciona los paquetes que deseas pedir.</p>
+
+  <section class="resumen" aria-live="polite">
+    <div class="dato">
+      Cantidad de Productos
+      <strong id="total-paquetes">0 paquetes</strong>
+    </div>
+    <div class="dato">
+      Costo total
+      <strong id="total-costo">RD$0.00</strong>
+    </div>
+  </section>
+
+  <div id="catalogo"></div>
+  <p class="aviso">Versión de prueba. Las cantidades se mantienen mientras esta página permanezca abierta. Todavía no se envían pedidos.</p>
+</main>
+
+<script>
+(() => {
+  const categorias = [
+    {
+      nombre: "Papitas de 10",
+      productos: ["Chito Rojo", "Chito Azul", "Chito Blanco", "Chito Verde", "Fandango"],
+      precio: 105
+    },
+    {
+      nombre: "Papitas de 15",
+      productos: [],
+      precio: 0
+    },
+    {
+      nombre: "Papitas de 20",
+      productos: [],
+      precio: 0
+    }
+  ];
+
+  const cantidades = {};
+  const catalogo = document.getElementById("catalogo");
+
+  categorias.forEach((categoria, indice) => {
+    const seccion = document.createElement("section");
+    const titulo = document.createElement("h2");
+    titulo.textContent = categoria.nombre;
+    seccion.appendChild(titulo);
+
+    const rejilla = document.createElement("div");
+    rejilla.className = "productos";
+
+    if (categoria.productos.length === 0) {
+      const nota = document.createElement("p");
+      nota.className = "aviso";
+      nota.textContent = "Esta categoría se completará en el siguiente paso.";
+      seccion.appendChild(nota);
+    }
+
+    categoria.productos.forEach(nombre => {
+      cantidades[nombre] = 0;
+
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "producto";
+
+      const foto = document.createElement("div");
+      foto.className = "foto";
+      foto.textContent = "Foto del producto";
+
+      const nombreEl = document.createElement("div");
+      nombreEl.className = "nombre";
+      nombreEl.textContent = nombre;
+
+      const detalle = document.createElement("div");
+      detalle.className = "detalle";
+      detalle.textContent = "Paquete de 12 unidades";
+
+      const precio = document.createElement("div");
+      precio.className = "precio";
+      precio.textContent = "RD$" + categoria.precio.toFixed(2);
+
+      const controles = document.createElement("div");
+      controles.className = "controles";
+
+      const menos = document.createElement("button");
+      menos.type = "button";
+      menos.textContent = "−";
+      menos.setAttribute("aria-label", "Quitar " + nombre);
+
+      const cantidad = document.createElement("span");
+      cantidad.className = "cantidad";
+      cantidad.textContent = "0";
+
+      const mas = document.createElement("button");
+      mas.type = "button";
+      mas.textContent = "+";
+      mas.setAttribute("aria-label", "Agregar " + nombre);
+
+      menos.addEventListener("click", () => {
+        cantidades[nombre] = Math.max(0, cantidades[nombre] - 1);
+        cantidad.textContent = cantidades[nombre];
+        actualizarResumen();
+      });
+
+      mas.addEventListener("click", () => {
+        cantidades[nombre]++;
+        cantidad.textContent = cantidades[nombre];
+        actualizarResumen();
+      });
+
+      controles.append(menos, cantidad, mas);
+      tarjeta.append(foto, nombreEl, detalle, precio, controles);
+      rejilla.appendChild(tarjeta);
+    });
+
+    seccion.appendChild(rejilla);
+    catalogo.appendChild(seccion);
+  });
+
+  function actualizarResumen() {
+    let paquetes = 0;
+    let costo = 0;
+
+    categorias.forEach(categoria => {
+      categoria.productos.forEach(nombre => {
+        paquetes += cantidades[nombre] || 0;
+        costo += (cantidades[nombre] || 0) * categoria.precio;
+      });
+    });
+
+    document.getElementById("total-paquetes").textContent =
+      paquetes + (paquetes === 1 ? " paquete" : " paquetes");
+
+    document.getElementById("total-costo").textContent =
+      "RD$" + costo.toLocaleString("es-DO", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+  }
+})();
+</script>
+</body>
+</html>
