@@ -1,213 +1,181 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pedidos | Chucherías Blas</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      color: #292929;
-      background: #fff;
-    }
-    main { max-width: 900px; margin: auto; }
-    h1 { color: #a94313; font-size: 26px; }
-    h2 { margin-top: 30px; border-bottom: 2px solid #f1d2bd; padding-bottom: 8px; }
-    .resumen {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 20px;
-      border-radius: 14px;
-      background: #fff0e4;
-      margin-bottom: 24px;
-    }
-    .dato { flex: 1; min-width: 150px; }
-    .dato strong {
-      display: block;
-      margin-top: 8px;
-      color: #a94313;
-      font-size: 24px;
-    }
-    .productos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 14px;
-    }
-    .producto {
-      padding: 14px 10px;
-      text-align: center;
-      border: 1px solid #e4e4e4;
-      border-radius: 14px;
-    }
-    .foto {
-      min-height: 95px;
-      display: grid;
-      place-items: center;
-      border-radius: 9px;
-      background: #f7f7f7;
-      color: #777;
-      font-size: 12px;
-    }
-    .nombre { font-weight: bold; margin: 12px 0 7px; }
-    .detalle { font-size: 12px; color: #666; }
-    .precio { margin: 10px 0; font-weight: bold; color: #a94313; }
-    .controles { display: flex; justify-content: center; align-items: center; gap: 14px; }
-    button {
-      width: 36px; height: 36px;
-      border: 0; border-radius: 8px;
-      background: #a94313; color: white;
-      font-size: 22px; cursor: pointer;
-    }
-    .cantidad { min-width: 18px; font-weight: bold; }
-    .aviso { color: #666; font-size: 13px; line-height: 1.5; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chucherías Blas</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Playfair+Display&display=swap" rel="stylesheet">
+<style>
+:root{--c1:#d9480f;--c2:#fff4e6;--tx:#1f1f1f;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:var(--tx);background:#fff}
+.resumen{background:var(--c2);border:2px solid var(--c1);border-radius:14px;padding:16px;margin-bottom:26px}
+.resumen h2{margin:0 0 10px;font-size:22px}
+.datos{display:flex;gap:16px;flex-wrap:wrap}
+.datos div{flex:1;min-width:150px;background:#fff;border-radius:10px;padding:10px 14px}
+.datos span{display:block;font-size:14px;color:#666}
+.datos strong{font-size:26px;color:var(--c1)}
+.vaciar{margin-top:12px;border:0;background:none;color:#666;text-decoration:underline;cursor:pointer;font-size:14px}
+.cat{margin-bottom:30px}
+.cat>h2{text-align:center;font-size:clamp(30px,4.2vw,50px);margin:0 0 18px;font-weight:700}
+.fila{padding:26px 0;border-top:1px solid #e6e6e6;display:grid;gap:28px;align-items:center}
+.lado{grid-template-columns:1fr 1fr}
+.dos{grid-template-columns:1fr 1fr}
+.col{text-align:center}
+.foto{aspect-ratio:16/9;background:#f5f5f5;border:2px dashed #e2e2e2;overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.txt{text-align:center}
+.nombre{font-family:"Playfair Display",Georgia,serif;font-weight:400;line-height:1.2}
+.lado .nombre{font-size:clamp(28px,3.6vw,46px);margin-bottom:22px}
+.dos .nombre{font-size:clamp(20px,2.2vw,28px);margin:16px 0 18px}
+.dato{font-weight:700;font-size:17px;margin:8px 0}
+.nd{color:#b00020;font-weight:700;font-size:16px;margin:0 0 6px}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
+.ctrl button{width:40px;height:40px;border-radius:50%;border:2px solid var(--c1);background:#fff;color:var(--c1);font-size:24px;line-height:1;cursor:pointer}
+.ctrl button:active{background:var(--c1);color:#fff}
+.ctrl button:disabled{opacity:.3;cursor:not-allowed}
+.ctrl b{min-width:28px;font-size:21px}
+.gal{grid-template-columns:1fr 2fr;align-items:start}
+.pila{display:grid;gap:12px}
+.pila .foto,.principal .foto{aspect-ratio:4/3}
+.principal .txt{margin-top:16px}
+.btn{display:inline-block;margin-top:12px;margin-right:14px;padding:9px 18px;border-radius:24px;background:var(--c1);color:#fff;text-decoration:none;font-weight:700;font-size:15px}
+.pedido{max-width:760px;margin:0 auto}
+.pedido h2{text-align:center;font-size:clamp(28px,4vw,44px);margin:0 0 18px}
+.pedido table{width:100%;border-collapse:collapse;font-size:17px}
+.pedido th{font-size:14px;color:#666;text-align:left;border-bottom:2px solid var(--c1);padding:8px 6px}
+.pedido td{padding:12px 6px;border-bottom:1px solid #e6e6e6;vertical-align:top}
+.pedido .num,.pedido th.num{text-align:right;white-space:nowrap}
+.total{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--c2);border:2px solid var(--c1);border-radius:14px;padding:16px 20px;margin-top:20px;font-weight:700}
+.total strong{font-size:28px;color:var(--c1)}
+.vacio{text-align:center;color:#777;padding:30px 0}
+.pronto{text-align:center;color:#888;font-style:italic}
+@media(max-width:600px){.gal{grid-template-columns:1fr}.pila{grid-template-columns:repeat(3,1fr)}.lado{grid-template-columns:1fr}.lado.inv .foto{order:-1}.dos{gap:14px}.fila{padding:20px 0}}
+</style>
 </head>
 <body>
-<main>
-  <h1>Chucherías Blas</h1>
-  <p>Selecciona los paquetes que deseas pedir.</p>
-
-  <section class="resumen" aria-live="polite">
-    <div class="dato">
-      Cantidad de Productos
-      <strong id="total-paquetes">0 paquetes</strong>
-    </div>
-    <div class="dato">
-      Costo total
-      <strong id="total-costo">RD$0.00</strong>
-    </div>
-  </section>
-
-  <div id="catalogo"></div>
-  <p class="aviso">Versión de prueba. Las cantidades se mantienen mientras esta página permanezca abierta. Todavía no se envían pedidos.</p>
-</main>
-
+<main id="app"></main>
 <script>
-(() => {
-  const categorias = [
-    {
-      nombre: "Papitas de 10",
-      productos: ["Chito Rojo", "Chito Azul", "Chito Blanco", "Chito Verde", "Fandango"],
-      precio: 105
-    },
-    {
-      nombre: "Papitas de 15",
-      productos: [],
-      precio: 0
-    },
-    {
-      nombre: "Papitas de 20",
-      productos: [],
-      precio: 0
-    }
-  ];
+/* ================= DATOS (aquí se agregan los productos nuevos) =================
+   Cada bloque de abajo es una categoría (por ejemplo "Papitas de 10") de una página de Google Sites.
+   - pagina: nombre de la página de Google Sites a la que pertenece (lays, yummies, o una nueva).
+   - Para agregar OTRA página o categoría: copia un bloque completo, ponlo ARRIBA (lo más nuevo primero),
+     cambia la clave, "pagina", el título y los productos. Los "id" deben ser únicos.
+   - No hace falta tocar nada más: el resumen y la página del pedido incluyen los productos nuevos solos.
+   - diseno: "izq" = foto a la izquierda, "der" = foto a la derecha, "dos" = dos productos en columnas,
+     "gal" = un producto con varias fotos.
+   - Un producto agotado lleva  disponible: false
+   Direcciones para incorporar:  ?vista=<pagina>  (toda la página),  ?vista=<clave>  (una categoría),
+   ?vista=resumen,  ?vista=pedido  */
+const U = "12 Unidades";
+const CATALOGO = {
+  yummies_10: { pagina: "yummies", titulo: "Papitas de 10", diseno: ["dos", "dos"], productos: [
+    { id: "q10-palitos",   nombre: "Palitos de Papas", presentacion: U, precio: 100, foto: "" },
+    { id: "q10-anillito",  nombre: "Anillito",         presentacion: U, precio: 100, foto: "" },
+    { id: "q10-cappy",     nombre: "Cappy",            presentacion: U, precio: 100, foto: "" },
+    { id: "q10-cappy-pic", nombre: "Cappy Picante",    presentacion: U, precio: 100, foto: "" }
+  ]},
+  yummies_15: { pagina: "yummies", titulo: "Papitas de 15", diseno: ["izq"], productos: [
+    { id: "q15-platanito", nombre: "Platanito Zambos", presentacion: U, precio: 150, foto: "" }
+  ]},
+  yummies_20: { pagina: "yummies", titulo: "Papitas de 20", diseno: ["gal"], productos: [
+    { id: "q20-taqueritos", nombre: "Taqueritos", presentacion: U, precio: 200, foto: "", fotos: ["", "", ""] }
+  ]},
+  lays_10: { pagina: "lays", titulo: "Papitas de 10", diseno: ["izq", "der", "izq", "dos"], productos: [
+    { id: "p10-chito-rojo",   nombre: "Chito Rojo",   presentacion: U, precio: 105, foto: "" },
+    { id: "p10-chito-azul",   nombre: "Chito Azul",   presentacion: U, precio: 105, foto: "" },
+    { id: "p10-chito-blanco", nombre: "Chito Blanco", presentacion: U, precio: 105, foto: "" },
+    { id: "p10-chito-verde",  nombre: "Chito Verde",  presentacion: U, precio: 105, foto: "" },
+    { id: "p10-fandango",     nombre: "Fandango",     presentacion: U, precio: 105, foto: "" }
+  ]},
+  lays_15: { pagina: "lays", titulo: "Papitas de 15", diseno: ["dos", "dos", "dos"], productos: [
+    { id: "p15-hoj-queso",    nombre: "Hojuelitas Queso",    presentacion: U, precio: 155, foto: "" },
+    { id: "p15-hoj-bbq",      nombre: "Hojuelitas BBQ",      presentacion: U, precio: 155, foto: "" },
+    { id: "p15-hoj-tocineta", nombre: "Hojuelitas Tocineta", presentacion: U, precio: 155, foto: "" },
+    { id: "p15-hoj-picante",  nombre: "Hojuelitas Picante",  presentacion: U, precio: 155, foto: "", disponible: false },
+    { id: "p15-dorito-rojo",  nombre: "Dorito Rojo",         presentacion: U, precio: 155, foto: "" },
+    { id: "p15-dorito-negro", nombre: "Dorito Negro",        presentacion: U, precio: 155, foto: "" }
+  ]},
+  lays_20: { pagina: "lays", titulo: "Papitas de 20", diseno: ["dos", "izq", "der", "dos"], productos: [
+    { id: "p20-rufles-carne", nombre: "Rufles de Carne", presentacion: U, precio: 210, foto: "" },
+    { id: "p20-rufles-queso", nombre: "Rufles de Queso", presentacion: U, precio: 210, foto: "" },
+    { id: "p20-lays-queso",   nombre: "Lays Queso",      presentacion: U, precio: 210, foto: "" },
+    { id: "p20-lays-sal",     nombre: "Lays Sal",        presentacion: U, precio: 210, foto: "" },
+    { id: "p20-lays-limon",   nombre: "Lays Limón",      presentacion: U, precio: 210, foto: "" },
+    { id: "p20-lays-cebolla", nombre: "Lays Cebolla",    presentacion: U, precio: 210, foto: "", disponible: false }
+  ]}
+};
+/* Si ya tienes la página del pedido en Google Sites, pon aquí su dirección para mostrar el botón "Ver mi pedido" */
+const URL_PEDIDO = "";
+/* Nombres anteriores, para que los enlaces ya usados sigan funcionando */
+const ALIAS = { papitas10: "lays_10", papitas15: "lays_15", papitas20: "lays_20", pag2_10: "yummies_10", pag2_15: "yummies_15", pag2_20: "yummies_20", pagina1: "lays", pagina2: "yummies" };
 
-  const cantidades = {};
-  const catalogo = document.getElementById("catalogo");
-
-  categorias.forEach((categoria, indice) => {
-    const seccion = document.createElement("section");
-    const titulo = document.createElement("h2");
-    titulo.textContent = categoria.nombre;
-    seccion.appendChild(titulo);
-
-    const rejilla = document.createElement("div");
-    rejilla.className = "productos";
-
-    if (categoria.productos.length === 0) {
-      const nota = document.createElement("p");
-      nota.className = "aviso";
-      nota.textContent = "Esta categoría se completará en el siguiente paso.";
-      seccion.appendChild(nota);
-    }
-
-    categoria.productos.forEach(nombre => {
-      cantidades[nombre] = 0;
-
-      const tarjeta = document.createElement("article");
-      tarjeta.className = "producto";
-
-      const foto = document.createElement("div");
-      foto.className = "foto";
-      foto.textContent = "Foto del producto";
-
-      const nombreEl = document.createElement("div");
-      nombreEl.className = "nombre";
-      nombreEl.textContent = nombre;
-
-      const detalle = document.createElement("div");
-      detalle.className = "detalle";
-      detalle.textContent = "Paquete de 12 unidades";
-
-      const precio = document.createElement("div");
-      precio.className = "precio";
-      precio.textContent = "RD$" + categoria.precio.toFixed(2);
-
-      const controles = document.createElement("div");
-      controles.className = "controles";
-
-      const menos = document.createElement("button");
-      menos.type = "button";
-      menos.textContent = "−";
-      menos.setAttribute("aria-label", "Quitar " + nombre);
-
-      const cantidad = document.createElement("span");
-      cantidad.className = "cantidad";
-      cantidad.textContent = "0";
-
-      const mas = document.createElement("button");
-      mas.type = "button";
-      mas.textContent = "+";
-      mas.setAttribute("aria-label", "Agregar " + nombre);
-
-      menos.addEventListener("click", () => {
-        cantidades[nombre] = Math.max(0, cantidades[nombre] - 1);
-        cantidad.textContent = cantidades[nombre];
-        actualizarResumen();
-      });
-
-      mas.addEventListener("click", () => {
-        cantidades[nombre]++;
-        cantidad.textContent = cantidades[nombre];
-        actualizarResumen();
-      });
-
-      controles.append(menos, cantidad, mas);
-      tarjeta.append(foto, nombreEl, detalle, precio, controles);
-      rejilla.appendChild(tarjeta);
-    });
-
-    seccion.appendChild(rejilla);
-    catalogo.appendChild(seccion);
-  });
-
-  function actualizarResumen() {
-    let paquetes = 0;
-    let costo = 0;
-
-    categorias.forEach(categoria => {
-      categoria.productos.forEach(nombre => {
-        paquetes += cantidades[nombre] || 0;
-        costo += (cantidades[nombre] || 0) * categoria.precio;
-      });
-    });
-
-    document.getElementById("total-paquetes").textContent =
-      paquetes + (paquetes === 1 ? " paquete" : " paquetes");
-
-    document.getElementById("total-costo").textContent =
-      "RD$" + costo.toLocaleString("es-DO", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+/* ---------- CARRITO COMPARTIDO ---------- */
+const KEY = "blas_carrito";
+let mem = {}, bc = null;
+try { bc = new BroadcastChannel("blas"); bc.onmessage = pintar; } catch (e) {}
+window.addEventListener("storage", e => { if (e.key === KEY) pintar(); });
+function leer() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return mem; } }
+function guardar(c) { mem = c; try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} try { bc && bc.postMessage(1); } catch (e) {} }
+function cambiar(id, d) { const c = leer(), n = Math.max(0, (c[id] || 0) + d); if (n) c[id] = n; else delete c[id]; guardar(c); pintar(); }
+function vaciar() { guardar({}); pintar(); }
+function precios() { const m = {}; Object.values(CATALOGO).forEach(k => k.productos.forEach(p => m[p.id] = p.precio)); return m; }
+/* ---------- VISTAS ---------- */
+const fmt = n => "RD$" + n.toLocaleString("es-DO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function resumen() {
+  const c = leer(), pr = precios(); let n = 0, t = 0;
+  for (const id in c) if (pr[id] !== undefined) { n += c[id]; t += c[id] * pr[id]; }
+  return `<section class="resumen"><h2>Resumen de tu pedido</h2><div class="datos">
+  <div><span>Cantidad de Productos</span><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></div>
+  <div><span>Costo</span><strong>${fmt(t)}</strong></div></div>
+  ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="_top">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar()">Vaciar pedido</button></section>`;
+}
+const foto = p => `<div class="foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}">` : ""}</div>`;
+function texto(p, c) {
+  const off = p.disponible === false;
+  return `<div class="txt"><div class="nombre">${p.nombre}</div><div class="dato">${p.presentacion}</div>
+  <div class="dato">Precio: $${p.precio}</div>${off ? `<div class="nd">*No Disponible*</div>` : ""}
+  <div class="ctrl"><button onclick="cambiar('${p.id}',-1)" aria-label="Quitar uno">−</button><b>${c[p.id] || 0}</b><button onclick="cambiar('${p.id}',1)" aria-label="Añadir uno"${off ? " disabled" : ""}>+</button></div></div>`;
+}
+function categoria(k) {
+  const cat = CATALOGO[k]; if (!cat) return "";
+  const c = leer(), ps = cat.productos; let i = 0; const filas = [];
+  const dos = () => { const a = ps[i++], b = ps[i++]; filas.push(`<div class="fila dos">${[a, b].map(x => x ? `<div class="col">${foto(x)}${texto(x, c)}</div>` : "<div></div>").join("")}</div>`); };
+  for (const t of cat.diseno || []) {
+    if (i >= ps.length) break;
+    if (t === "dos") dos();
+    else if (t === "gal") { const p = ps[i++]; const fs = p.fotos || ["", "", ""]; filas.push(`<div class="fila gal"><div class="pila">${fs.map(f => `<div class="foto">${f ? `<img src="${f}" alt="${p.nombre}">` : ""}</div>`).join("")}</div><div class="principal">${foto(p)}${texto(p, c)}</div></div>`); }
+    else { const p = ps[i++]; filas.push(t === "izq" ? `<div class="fila lado">${foto(p)}${texto(p, c)}</div>` : `<div class="fila lado inv">${texto(p, c)}${foto(p)}</div>`); }
   }
-})();
+  while (i < ps.length) dos();
+  return `<section class="cat"><h2>${cat.titulo}</h2>${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
+}
+function pedido() {
+  const c = leer(); let n = 0, t = 0, filas = "";
+  for (const k in CATALOGO) for (const p of CATALOGO[k].productos) {
+    const q = c[p.id] || 0; if (!q) continue;
+    n += q; t += q * p.precio;
+    filas += `<tr><td>${p.nombre}</td><td class="num">${q}</td><td class="num">$${p.precio}</td><td class="num">${fmt(q * p.precio)}</td></tr>`;
+  }
+  const cuerpo = filas
+    ? `<table><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead><tbody>${filas}</tbody></table>
+       <div class="total"><span>Cantidad de Productos<br><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(t)}</strong></span></div>
+       <button class="vaciar" onclick="vaciar()">Vaciar pedido</button>`
+    : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
+  return `<section class="pedido"><h2>Tu pedido</h2>${cuerpo}</section>`;
+}
+function pintar() {
+  let v = new URLSearchParams(location.search).get("vista") || "todo";
+  v = ALIAS[v] || v;
+  const dePagina = Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === v);
+  document.getElementById("app").innerHTML =
+    v === "resumen" ? resumen() :
+    v === "pedido" ? pedido() :
+    v === "todo" ? resumen() + Object.keys(CATALOGO).map(categoria).join("") :
+    dePagina.length ? dePagina.map(categoria).join("") :
+    categoria(v);
+}
+pintar();
 </script>
 </body>
 </html>
