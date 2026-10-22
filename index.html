@@ -66,7 +66,8 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
      "gal" = un producto con varias fotos.
    - Un producto agotado lleva  disponible: false
    Direcciones para incorporar:  ?vista=<pagina>  (toda la página),  ?vista=<clave>  (una categoría),
-   ?vista=resumen,  ?vista=pedido  */
+   ?vista=resumen_<pagina> (resumen solo de esa página, ej. resumen_lays),
+   ?vista=pedido (pedido completo con el total de TODAS las páginas)  */
 const U = "12 Unidades";
 const CATALOGO = {
   yummies_10: { pagina: "yummies", titulo: "Papitas de 10", diseno: ["dos", "dos"], productos: [
@@ -118,17 +119,20 @@ window.addEventListener("storage", e => { if (e.key === KEY) pintar(); });
 function leer() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return mem; } }
 function guardar(c) { mem = c; try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} try { bc && bc.postMessage(1); } catch (e) {} }
 function cambiar(id, d) { const c = leer(), n = Math.max(0, (c[id] || 0) + d); if (n) c[id] = n; else delete c[id]; guardar(c); pintar(); }
-function vaciar() { guardar({}); pintar(); }
-function precios() { const m = {}; Object.values(CATALOGO).forEach(k => k.productos.forEach(p => m[p.id] = p.precio)); return m; }
+/* vaciar("lays") borra solo los productos de esa página; vaciar() borra todo el pedido */
+function vaciar(pg) { if (pg) { const c = leer(); for (const id in precios(pg)) delete c[id]; guardar(c); } else guardar({}); pintar(); }
+function precios(pg) { const m = {}; Object.values(CATALOGO).forEach(k => { if (!pg || k.pagina === pg) k.productos.forEach(p => m[p.id] = p.precio); }); return m; }
 /* ---------- VISTAS ---------- */
 const fmt = n => "RD$" + n.toLocaleString("es-DO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-function resumen() {
-  const c = leer(), pr = precios(); let n = 0, t = 0;
+/* resumen(pg): suma solo los productos de la página pg; sin pg suma todos */
+function resumen(pg) {
+  if (pg) pg = ALIAS[pg] || pg;
+  const c = leer(), pr = precios(pg); let n = 0, t = 0;
   for (const id in c) if (pr[id] !== undefined) { n += c[id]; t += c[id] * pr[id]; }
   return `<section class="resumen"><h2>Resumen de tu pedido</h2><div class="datos">
   <div><span>Cantidad de Productos</span><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></div>
   <div><span>Costo</span><strong>${fmt(t)}</strong></div></div>
-  ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="_top">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar()">Vaciar pedido</button></section>`;
+  ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="_top">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar(${pg ? "'" + pg + "'" : ""})">Vaciar pedido</button></section>`;
 }
 const foto = p => `<div class="foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}">` : ""}</div>`;
 function texto(p, c) {
@@ -169,7 +173,8 @@ function pintar() {
   v = ALIAS[v] || v;
   const dePagina = Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === v);
   document.getElementById("app").innerHTML =
-    v === "resumen" ? resumen() :
+    v === "resumen" ? resumen(new URLSearchParams(location.search).get("pagina")) :
+    v.startsWith("resumen_") ? resumen(v.slice(8)) :
     v === "pedido" ? pedido() :
     v === "todo" ? resumen() + Object.keys(CATALOGO).map(categoria).join("") :
     dePagina.length ? dePagina.map(categoria).join("") :
