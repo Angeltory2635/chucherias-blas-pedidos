@@ -180,7 +180,6 @@ function pedido() {
         if (!q) continue;
 
         const subtotal = q * p.precio;
-
         subtotalMarca += subtotal;
         cantidadMarca += q;
 
@@ -204,7 +203,6 @@ function pedido() {
             <span>${marca}</span>
             <strong>${fmt(subtotalMarca)}</strong>
           </summary>
-
           <div class="tabla-papitas">
             <table>
               <thead>
@@ -230,20 +228,27 @@ function pedido() {
           <strong>${fmt(totalGeneral)}</strong>
         </summary>
         ${contenido}
-        <div class="total">
-          <span>Cantidad de Productos<br>
-            <strong>${cantidadGeneral} ${cantidadGeneral === 1 ? "paquete" : "paquetes"}</strong>
-          </span>
-          <span>Costo total<br>
-            <strong>${fmt(totalGeneral)}</strong>
-          </span>
-        </div>
         <button class="vaciar" onclick="vaciar()">Vaciar pedido</button>
       </details>`
     : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
 
-  return `<section class="pedido"><h2>Tu pedido</h2>${cuerpo}</section>`;
+  const totalFijo = `
+    <div class="total">
+      <span>Cantidad de Productos<br>
+        <strong>${cantidadGeneral} ${cantidadGeneral === 1 ? "paquete" : "paquetes"}</strong>
+      </span>
+      <span>Costo total<br>
+        <strong>${fmt(totalGeneral)}</strong>
+      </span>
+    </div>`;
+
+  return `<section class="pedido">
+    <h2>Tu pedido</h2>
+    ${cuerpo}
+    ${contenido ? totalFijo : ""}
+  </section>`;
 }
+
 function pintar() {
   let v = new URLSearchParams(location.search).get("vista") || "todo";
   v = ALIAS[v] || v;
