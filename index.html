@@ -177,7 +177,7 @@ function pintar() {
     v.startsWith("resumen_") ? resumen(v.slice(8)) :
     v === "pedido" ? pedido() :
     v === "todo" ? resumen() + Object.keys(CATALOGO).map(categoria).join("") :
-    dePagina.length ? dePagina.map(categoria).join("") :
+    dePagina.length ? resumen(v) + dePagina.map(categoria).join("") :
     categoria(v);
 }
 pintar();
