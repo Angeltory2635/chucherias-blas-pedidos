@@ -244,13 +244,6 @@ function pedido() {
 
   return `<section class="pedido"><h2>Tu pedido</h2>${cuerpo}</section>`;
 }
-  const cuerpo = filas
-    ? `<table><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead><tbody>${filas}</tbody></table>
-       <div class="total"><span>Cantidad de Productos<br><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(t)}</strong></span></div>
-       <button class="vaciar" onclick="vaciar()">Vaciar pedido</button>`
-    : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
-  return `<section class="pedido"><h2>Tu pedido</h2>${cuerpo}</section>`;
-}
 function pintar() {
   let v = new URLSearchParams(location.search).get("vista") || "todo";
   v = ALIAS[v] || v;
