@@ -155,12 +155,95 @@ function categoria(k) {
   return `<section class="cat"><h2>${cat.titulo}</h2>${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
 }
 function pedido() {
-  const c = leer(); let n = 0, t = 0, filas = "";
-  for (const k in CATALOGO) for (const p of CATALOGO[k].productos) {
-    const q = c[p.id] || 0; if (!q) continue;
-    n += q; t += q * p.precio;
-    filas += `<tr><td>${p.nombre}</td><td class="num">${q}</td><td class="num">$${p.precio}</td><td class="num">${fmt(q * p.precio)}</td></tr>`;
+  const c = leer();
+
+  const grupos = {
+    "Lays": ["lays_10", "lays_15", "lays_20"],
+    "Yummies": ["yummies_10", "yummies_15", "yummies_20"]
+  };
+
+  let totalGeneral = 0;
+  let cantidadGeneral = 0;
+  let contenido = "";
+
+  for (const marca in grupos) {
+    let subtotalMarca = 0;
+    let cantidadMarca = 0;
+    let filas = "";
+
+    for (const categoria of grupos[marca]) {
+      const grupo = CATALOGO[categoria];
+      if (!grupo) continue;
+
+      for (const p of grupo.productos) {
+        const q = c[p.id] || 0;
+        if (!q) continue;
+
+        const subtotal = q * p.precio;
+
+        subtotalMarca += subtotal;
+        cantidadMarca += q;
+
+        filas += `
+          <tr>
+            <td>${p.nombre}</td>
+            <td class="num">${q}</td>
+            <td class="num">RD$${p.precio}</td>
+            <td class="num">${fmt(subtotal)}</td>
+          </tr>`;
+      }
+    }
+
+    totalGeneral += subtotalMarca;
+    cantidadGeneral += cantidadMarca;
+
+    if (cantidadMarca > 0) {
+      contenido += `
+        <details class="grupo-papitas">
+          <summary>
+            <span>${marca}</span>
+            <strong>${fmt(subtotalMarca)}</strong>
+          </summary>
+
+          <div class="tabla-papitas">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th class="num">Cantidad</th>
+                  <th class="num">Precio</th>
+                  <th class="num">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>${filas}</tbody>
+            </table>
+          </div>
+        </details>`;
+    }
   }
+
+  const cuerpo = contenido
+    ? `
+      <details class="resumen-papitas" open>
+        <summary>
+          <span>Papitas Lays/Yummies</span>
+          <strong>${fmt(totalGeneral)}</strong>
+        </summary>
+        ${contenido}
+        <div class="total">
+          <span>Cantidad de Productos<br>
+            <strong>${cantidadGeneral} ${cantidadGeneral === 1 ? "paquete" : "paquetes"}</strong>
+          </span>
+          <span>Costo total<br>
+            <strong>${fmt(totalGeneral)}</strong>
+          </span>
+        </div>
+        <button class="vaciar" onclick="vaciar()">Vaciar pedido</button>
+      </details>`
+    : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
+
+  return `<section class="pedido"><h2>Tu pedido</h2>${cuerpo}</section>`;
+}
   const cuerpo = filas
     ? `<table><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead><tbody>${filas}</tbody></table>
        <div class="total"><span>Cantidad de Productos<br><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(t)}</strong></span></div>
