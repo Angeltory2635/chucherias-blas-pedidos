@@ -50,6 +50,7 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
 .total strong{font-size:28px;color:var(--c1)}
 .vacio{text-align:center;color:#777;padding:30px 0}
 .pronto{text-align:center;color:#888;font-style:italic}
+.marca{text-align:center;font-size:clamp(36px,5vw,60px);margin:50px 0 10px;padding-top:24px;border-top:4px solid var(--c1);color:var(--c1)}
 @media(max-width:600px){.gal{grid-template-columns:1fr}.pila{grid-template-columns:repeat(3,1fr)}.lado{grid-template-columns:1fr}.lado.inv .foto{order:-1}.dos{gap:14px}.fila{padding:20px 0}}
 </style>
 </head>
@@ -72,11 +73,11 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
 const U = "12 Unidades";
 const CATALOGO = {
   yummies_10: { pagina: "yummies", titulo: "Papitas de 10", diseno: ["dos", "dos", "dos"], productos: [
-    { id: "q10-palitos",   nombre: "Palitos de Papas", presentacion: U, precio: 100, foto: "fotos/Palito_de_Papa.jpg" },
+    { id: "q10-palitos",   nombre: "Palitos de Papas", presentacion: U, precio: 100, foto: "fotos/Palito%20de%20Papa.jpg" },
     { id: "q10-anillito",  nombre: "Anillito",         presentacion: U, precio: 100, foto: "fotos/Anillitos.jpg" },
     { id: "q10-cappy",     nombre: "Cappy",            presentacion: U, precio: 100, foto: "" },
-    { id: "q10-cappy-pic", nombre: "Cappy Picante",    presentacion: U, precio: 100, foto: "fotos/Cappy_Picante.jpg" },
-    { id: "q10-tacos",     nombre: "Tacos de Queso",   presentacion: U, precio: 100, foto: "fotos/Taco_Queso.jpg" }
+    { id: "q10-cappy-pic", nombre: "Cappy Picante",    presentacion: U, precio: 100, foto: "fotos/Cappy%20Picante.jpg" },
+    { id: "q10-tacos",     nombre: "Tacos de Queso",   presentacion: U, precio: 100, foto: "fotos/Taco%20Queso.jpg" }
   ]},
   yummies_15: { pagina: "yummies", titulo: "Papitas de 15", diseno: ["izq"], productos: [
     { id: "q15-platanito", nombre: "Platanito Zambos", presentacion: U, precio: 150, foto: "fotos/Platanitos.jpg" }
@@ -85,26 +86,26 @@ const CATALOGO = {
     { id: "q20-taqueritos", nombre: "Taqueritos", presentacion: U, precio: 200, foto: "fotos/Taqueritos.jpg", fotos: ["fotos/Taqueritos.jpg", "fotos/Taqueritos.jpg", "fotos/Taqueritos.jpg"] }
   ]},
   lays_10: { pagina: "lays", titulo: "Papitas de 10", diseno: ["izq", "der", "izq", "dos"], productos: [
-    { id: "p10-chito-rojo",   nombre: "Chito Rojo",   presentacion: U, precio: 105, foto: "fotos/Chito_Rojo.jpg" },
-    { id: "p10-chito-azul",   nombre: "Chito Azul",   presentacion: U, precio: 105, foto: "fotos/Chito_Azul.jpg" },
-    { id: "p10-chito-blanco", nombre: "Chito Blanco", presentacion: U, precio: 105, foto: "fotos/Chitos_Blancos.jpg" },
+    { id: "p10-chito-rojo",   nombre: "Chito Rojo",   presentacion: U, precio: 105, foto: "fotos/Chito%20Rojo.jpg" },
+    { id: "p10-chito-azul",   nombre: "Chito Azul",   presentacion: U, precio: 105, foto: "fotos/Chito%20Azul.jpg" },
+    { id: "p10-chito-blanco", nombre: "Chito Blanco", presentacion: U, precio: 105, foto: "fotos/Chitos%20Blancos.jpg" },
     { id: "p10-chito-verde",  nombre: "Chito Verde",  presentacion: U, precio: 105, foto: "" },
     { id: "p10-fandango",     nombre: "Fandango",     presentacion: U, precio: 105, foto: "fotos/Fandangos.jpg" }
   ]},
   lays_15: { pagina: "lays", titulo: "Papitas de 15", diseno: ["dos", "dos", "dos"], productos: [
-    { id: "p15-hoj-queso",    nombre: "Hojuelitas Queso",    presentacion: U, precio: 155, foto: "fotos/Hojuelita_de_Queso.jpg" },
-    { id: "p15-hoj-bbq",      nombre: "Hojuelitas BBQ",      presentacion: U, precio: 155, foto: "fotos/Hojuelitas_BBQ.jpg" },
+    { id: "p15-hoj-queso",    nombre: "Hojuelitas Queso",    presentacion: U, precio: 155, foto: "fotos/Hojuelita%20de%20Queso.jpg" },
+    { id: "p15-hoj-bbq",      nombre: "Hojuelitas BBQ",      presentacion: U, precio: 155, foto: "fotos/Hojuelitas%20BBQ.jpg" },
     { id: "p15-hoj-tocineta", nombre: "Hojuelitas Tocineta", presentacion: U, precio: 155, foto: "" },
     { id: "p15-hoj-picante",  nombre: "Hojuelitas Picante",  presentacion: U, precio: 155, foto: "", disponible: false },
-    { id: "p15-dorito-rojo",  nombre: "Dorito Rojo",         presentacion: U, precio: 155, foto: "fotos/Dorito_Rojo.jpg" },
-    { id: "p15-dorito-negro", nombre: "Dorito Negro",        presentacion: U, precio: 155, foto: "fotos/Dorito_Negro.jpg" }
+    { id: "p15-dorito-rojo",  nombre: "Dorito Rojo",         presentacion: U, precio: 155, foto: "fotos/Dorito%20Rojo.jpg" },
+    { id: "p15-dorito-negro", nombre: "Dorito Negro",        presentacion: U, precio: 155, foto: "fotos/Dorito%20Negro.jpg" }
   ]},
   lays_20: { pagina: "lays", titulo: "Papitas de 20", diseno: ["dos", "izq", "der", "dos"], productos: [
-    { id: "p20-rufles-carne", nombre: "Rufles de Carne", presentacion: U, precio: 210, foto: "fotos/Rufle_e_Carne.jpg" },
-    { id: "p20-rufles-queso", nombre: "Rufles de Queso", presentacion: U, precio: 210, foto: "fotos/Rufle_e_Queso.jpg" },
-    { id: "p20-lays-queso",   nombre: "Lays Queso",      presentacion: U, precio: 210, foto: "fotos/Lays_Queso.jpg" },
+    { id: "p20-rufles-carne", nombre: "Rufles de Carne", presentacion: U, precio: 210, foto: "fotos/Rufle%20e%20Carne.jpg" },
+    { id: "p20-rufles-queso", nombre: "Rufles de Queso", presentacion: U, precio: 210, foto: "fotos/Rufle%20e%20Queso.jpg" },
+    { id: "p20-lays-queso",   nombre: "Lays Queso",      presentacion: U, precio: 210, foto: "fotos/Lays%20Queso.jpg" },
     { id: "p20-lays-sal",     nombre: "Lays Sal",        presentacion: U, precio: 210, foto: "" },
-    { id: "p20-lays-limon",   nombre: "Lays Limón",      presentacion: U, precio: 210, foto: "fotos/Lay_lemon.jpg" },
+    { id: "p20-lays-limon",   nombre: "Lays Limón",      presentacion: U, precio: 210, foto: "fotos/Lay%20lemon.jpg" },
     { id: "p20-lays-cebolla", nombre: "Lays Cebolla",    presentacion: U, precio: 210, foto: "", disponible: false }
   ]}
 };
@@ -259,7 +260,8 @@ function pintar() {
     v === "resumen" ? resumen(new URLSearchParams(location.search).get("pagina")) :
     v.startsWith("resumen_") ? resumen(v.slice(8)) :
     v === "pedido" ? pedido() :
-    v === "todo" ? resumen() + Object.keys(CATALOGO).map(categoria).join("") :
+    v === "todo" ? pedido() + [["lays", "Lays"], ["yummies", "Yummies"]].map(([pg, nombre]) =>
+      `<h2 class="marca">${nombre}</h2>` + resumen(pg) + Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === pg).map(categoria).join("")).join("") :
     dePagina.length ? resumen(v) + dePagina.map(categoria).join("") :
     categoria(v);
 }
