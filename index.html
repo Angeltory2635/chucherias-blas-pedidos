@@ -50,6 +50,25 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
 .total strong{font-size:28px;color:var(--c1)}
 .vacio{text-align:center;color:#777;padding:30px 0}
 .pronto{text-align:center;color:#888;font-style:italic}
+.pasos{display:flex;justify-content:center;gap:8px;margin:0 0 18px;flex-wrap:wrap}
+.pasos span{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f1f1f1;color:#777;font-size:14px;font-weight:700}
+.pasos b{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#bbb;color:#fff;align-items:center;justify-content:center;font-size:13px}
+.pasos .act{background:var(--c2);color:var(--c1);box-shadow:inset 0 0 0 2px var(--c1)}
+.pasos .act b,.pasos .hecho b{background:var(--c1)}
+.pasos .hecho{color:var(--c1)}
+.acciones{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:22px}
+.btn-prim,.btn-sec{padding:14px 26px;border-radius:30px;font:inherit;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none;text-align:center;display:inline-block}
+.btn-prim{background:var(--c1);color:#fff;border:2px solid var(--c1)}
+.btn-prim:hover{filter:brightness(1.08)}
+.btn-prim:disabled{opacity:.35;cursor:not-allowed;filter:none}
+.btn-sec{background:#fff;color:var(--c1);border:2px solid var(--c1)}
+.check{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:700;cursor:pointer;padding:14px 16px;border:2px solid #e6e6e6;border-radius:14px}
+.check input{width:24px;height:24px;accent-color:var(--c1);flex:none}
+.sub{text-align:center;color:#666;margin:-8px 0 18px}
+.tarjeta{border:2px solid #e6e6e6;border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.tarjeta h3{margin:0 0 8px;font-size:18px}
+.ok{background:#e8f6ec;color:#1b5e20;border-radius:10px;padding:12px 14px;font-weight:700;margin-top:16px}
+.mar{margin:18px 0 4px;font-size:20px;color:var(--c1)}
 .cat-titulo{text-align:center;font-size:clamp(30px,4.2vw,50px);margin:0 0 18px;font-weight:700}
 .cat-cab{display:flex;align-items:center;gap:10px;margin:0 0 18px}
 .cat-cab h2{flex:1;margin:0;text-align:center;font-size:clamp(30px,4.2vw,50px);font-weight:700}
@@ -120,6 +139,15 @@ const CATALOGO = {
 };
 /* Si ya tienes la página del pedido en Google Sites, pon aquí su dirección para mostrar el botón "Ver mi pedido" */
 const URL_PEDIDO = "https://sites.google.com/view/chucheriasblas/compra";
+/* ====== FLUJO DE COMPRA: Pedido -> Formulario -> Resumen final ======
+   URL_FORMULARIO: dirección de tu página de Google Sites donde está el formulario (Contacto).
+   URL_FINAL: dirección de la página final de Google Sites (la que lleva ?vista=final).
+   WHATSAPP: número donde recibes los pedidos, con código de país, solo números (ej.: "18095551234").
+   PEDIR_CONFIRMACION: true = el botón de seguir se activa cuando el cliente marca "Ya llené el formulario". */
+const URL_FORMULARIO = "https://sites.google.com/view/chucheriasblas/contacto";
+const URL_FINAL = "";
+const WHATSAPP = "18296332348";
+const PEDIR_CONFIRMACION = true;
 /* Nombres anteriores, para que los enlaces ya usados sigan funcionando */
 const ALIAS = { papitas10: "lays_10", papitas15: "lays_15", papitas20: "lays_20", pag2_10: "yummies_10", pag2_15: "yummies_15", pag2_20: "yummies_20", pagina1: "lays", pagina2: "yummies" };
 
@@ -175,7 +203,7 @@ function categoria(k) {
   while (i < ps.length) dos();
   return `<section class="cat">${cabecera(cat.titulo)}${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
 }
-function pedido() {
+function pedido(conBoton) {
   const c = leer();
 
   const grupos = {
@@ -264,9 +292,61 @@ function pedido() {
     </div>`;
 
   return `<section class="pedido">
+    ${conBoton ? pasos(1) : ""}
     <h2>Tu pedido</h2>
     ${cuerpo}
     ${contenido ? totalFijo : ""}
+    ${conBoton && contenido && URL_FORMULARIO ? `<div class="acciones"><span></span><a class="btn-prim" href="${URL_FORMULARIO}" target="_top">Continuar</a></div>` : ""}
+  </section>`;
+}
+
+/* ---------- Pasos del flujo de compra ---------- */
+let yaLleno = false, enviado = false;
+const pasos = n => `<div class="pasos">${["Pedido", "Formulario", "Confirmar"].map((t, i) => `<span class="${i + 1 === n ? "act" : i + 1 < n ? "hecho" : ""}"><b>${i + 1}</b>${t}</span>`).join("")}</div>`;
+/* Arma el pedido por marca. Las categorías se toman solas de CATALOGO (según "pagina"), así que las nuevas se incluyen sin tocar nada */
+function armarPedido() {
+  const c = leer(); let total = 0, cant = 0; const marcas = [];
+  for (const [pg, nombre] of [["lays", "Lays"], ["yummies", "Yummies"]]) {
+    const filas = []; let sub = 0;
+    for (const k of Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === pg))
+      for (const p of CATALOGO[k].productos) { const q = c[p.id] || 0; if (q) { filas.push({ nombre: p.nombre, q, precio: p.precio, sub: q * p.precio }); sub += q * p.precio; cant += q; } }
+    total += sub; if (filas.length) marcas.push({ nombre, filas, sub });
+  }
+  return { marcas, total, cant };
+}
+/* Paso 2: este bloque va debajo del formulario, en la página del formulario */
+function continuar() {
+  const p = armarPedido();
+  if (!p.cant) return `<section class="pedido">${pasos(2)}<p class="vacio">Todavía no has elegido ningún producto.</p></section>`;
+  const listo = !PEDIR_CONFIRMACION || yaLleno;
+  const boton = listo && URL_FINAL
+    ? `<a class="btn-prim" href="${URL_FINAL}" target="_top">Continuar al resumen final</a>`
+    : `<button class="btn-prim" disabled>Continuar al resumen final</button>`;
+  return `<section class="pedido">${pasos(2)}
+  ${PEDIR_CONFIRMACION ? `<label class="check"><input type="checkbox" ${yaLleno ? "checked" : ""} onchange="yaLleno=this.checked;pintar()"><span>Ya llené y envié el formulario</span></label>` : ""}
+  <div class="acciones"><span></span>${boton}</div></section>`;
+}
+function mensajePedido() {
+  const p = armarPedido();
+  let t = "*Pedido - Chucherías Blas*\n";
+  p.marcas.forEach(m => { t += "\n*" + m.nombre + "*\n"; m.filas.forEach(f => { t += "- " + f.q + " x " + f.nombre + " (RD$" + f.precio + ") = " + fmt(f.sub) + "\n"; }); });
+  t += "\n*Total: " + p.cant + (p.cant === 1 ? " paquete" : " paquetes") + " - " + fmt(p.total) + "*";
+  return t;
+}
+function marcarEnviado() { setTimeout(() => { enviado = true; pintar(); }, 400); }
+/* Paso 3: resumen final con el botón de enviar por WhatsApp */
+function final() {
+  const p = armarPedido();
+  if (!p.cant) return `<section class="pedido">${pasos(3)}<p class="vacio">Todavía no has elegido ningún producto.</p></section>`;
+  const tablas = p.marcas.map(m => `<h3 class="mar">${m.nombre}</h3><table><thead><tr><th>Producto</th><th class="num">Cant.</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead><tbody>${m.filas.map(f => `<tr><td>${f.nombre}</td><td class="num">${f.q}</td><td class="num">RD$${f.precio}</td><td class="num">${fmt(f.sub)}</td></tr>`).join("")}</tbody></table>`).join("");
+  const envio = WHATSAPP
+    ? `<a class="btn-prim" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensajePedido())}" target="_blank" rel="noopener" onclick="marcarEnviado()">Enviar pedido por WhatsApp</a>`
+    : `<button class="btn-prim" disabled>Enviar pedido por WhatsApp</button>`;
+  return `<section class="pedido">${pasos(3)}<h2>Confirma tu pedido</h2>
+  <div class="tarjeta">${tablas}
+    <div class="total"><span>Cantidad de Productos<br><strong>${p.cant} ${p.cant === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(p.total)}</strong></span></div></div>
+  <div class="acciones">${URL_PEDIDO ? `<a class="btn-sec" href="${URL_PEDIDO}" target="_top">Modificar pedido</a>` : "<span></span>"}${envio}</div>
+  ${enviado ? `<p class="ok">Se abrió WhatsApp con tu pedido. Pulsa «Enviar» allí para que nos llegue.</p><button class="vaciar" onclick="vaciar()">Listo, vaciar mi pedido</button>` : ""}
   </section>`;
 }
 
@@ -277,7 +357,9 @@ function pintar() {
   document.getElementById("app").innerHTML =
     v === "resumen" ? resumen(new URLSearchParams(location.search).get("pagina")) :
     v.startsWith("resumen_") ? resumen(v.slice(8)) :
-    v === "pedido" ? pedido() :
+    v === "pedido" ? pedido(true) :
+    v === "continuar" ? continuar() :
+    v === "final" ? final() :
     v === "todo" ? pedido() + [["lays", "Lays"], ["yummies", "Yummies"]].map(([pg, nombre]) =>
       `<h2 class="marca">${nombre}</h2>` + resumen(pg) + Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === pg).map(categoria).join("")).join("") :
     dePagina.length ? resumen(v) + dePagina.map(categoria).join("") :
