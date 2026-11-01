@@ -148,6 +148,9 @@ const URL_FORMULARIO = "https://sites.google.com/view/chucheriasblas/contacto";
 const URL_FINAL = "https://sites.google.com/view/chucheriasblas/confirmar";
 const WHATSAPP = "18296332348";
 const PEDIR_CONFIRMACION = true;
+/* DESTINO: cómo se abren los enlaces. Google Sites bloquea "_top" dentro de los bloques incrustados, por eso se abren en pestaña nueva ("_blank").
+   Si algún día quieres probar que navegue en la misma pestaña, cambia a "_top". */
+const DESTINO = "_blank";
 /* Nombres anteriores, para que los enlaces ya usados sigan funcionando */
 const ALIAS = { papitas10: "lays_10", papitas15: "lays_15", papitas20: "lays_20", pag2_10: "yummies_10", pag2_15: "yummies_15", pag2_20: "yummies_20", pagina1: "lays", pagina2: "yummies" };
 
@@ -172,14 +175,14 @@ function resumen(pg) {
   return `<section class="resumen"><h2>Resumen de tu pedido</h2><div class="datos">
   <div><span>Cantidad de Productos</span><strong>${n} ${n === 1 ? "paquete" : "paquetes"}</strong></div>
   <div><span>Costo</span><strong>${fmt(t)}</strong></div></div>
-  ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="_top">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar(${pg ? "'" + pg + "'" : ""})">Vaciar pedido</button></section>`;
+  ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="${DESTINO}">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar(${pg ? "'" + pg + "'" : ""})">Vaciar pedido</button></section>`;
 }
 /* Botón del carrito junto al título de cada categoría: lleva a la página del pedido (URL_PEDIDO) */
 function cabecera(titulo) {
   if (!URL_PEDIDO) return `<h2 class="cat-titulo">${titulo}</h2>`;
   const c = leer(); let n = 0; for (const id in c) n += c[id];
   return `<div class="cat-cab"><span class="esp"></span><h2>${titulo}</h2>
-  <a class="carro" href="${URL_PEDIDO}" target="_top" title="Ir a mi pedido" aria-label="Ir a mi pedido${n ? " (" + n + " paquetes)" : ""}">
+  <a class="carro" href="${URL_PEDIDO}" target="${DESTINO}" title="Ir a mi pedido" aria-label="Ir a mi pedido${n ? " (" + n + " paquetes)" : ""}">
   <img src="fotos/carrito.png" alt="">
   ${n ? `<span class="num-carro">${n}</span>` : ""}</a></div>`;
 }
@@ -296,7 +299,7 @@ function pedido(conBoton) {
     <h2>Tu pedido</h2>
     ${cuerpo}
     ${contenido ? totalFijo : ""}
-    ${conBoton && contenido && URL_FORMULARIO ? `<div class="acciones"><span></span><a class="btn-prim" href="${URL_FORMULARIO}" target="_top">Continuar</a></div>` : ""}
+    ${conBoton && contenido && URL_FORMULARIO ? `<div class="acciones"><span></span><a class="btn-prim" href="${URL_FORMULARIO}" target="${DESTINO}">Continuar</a></div>` : ""}
   </section>`;
 }
 
@@ -320,7 +323,7 @@ function continuar() {
   if (!p.cant) return `<section class="pedido">${pasos(2)}<p class="vacio">Todavía no has elegido ningún producto.</p></section>`;
   const listo = !PEDIR_CONFIRMACION || yaLleno;
   const boton = listo && URL_FINAL
-    ? `<a class="btn-prim" href="${URL_FINAL}" target="_top">Continuar al resumen final</a>`
+    ? `<a class="btn-prim" href="${URL_FINAL}" target="${DESTINO}">Continuar al resumen final</a>`
     : `<button class="btn-prim" disabled>Continuar al resumen final</button>`;
   return `<section class="pedido">${pasos(2)}
   ${PEDIR_CONFIRMACION ? `<label class="check"><input type="checkbox" ${yaLleno ? "checked" : ""} onchange="yaLleno=this.checked;pintar()"><span>Ya llené y envié el formulario</span></label>` : ""}
@@ -345,7 +348,7 @@ function final() {
   return `<section class="pedido">${pasos(3)}<h2>Confirma tu pedido</h2>
   <div class="tarjeta">${tablas}
     <div class="total"><span>Cantidad de Productos<br><strong>${p.cant} ${p.cant === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(p.total)}</strong></span></div></div>
-  <div class="acciones">${URL_PEDIDO ? `<a class="btn-sec" href="${URL_PEDIDO}" target="_top">Modificar pedido</a>` : "<span></span>"}${envio}</div>
+  <div class="acciones">${URL_PEDIDO ? `<a class="btn-sec" href="${URL_PEDIDO}" target="${DESTINO}">Modificar pedido</a>` : "<span></span>"}${envio}</div>
   ${enviado ? `<p class="ok">Se abrió WhatsApp con tu pedido. Pulsa «Enviar» allí para que nos llegue.</p><button class="vaciar" onclick="vaciar()">Listo, vaciar mi pedido</button>` : ""}
   </section>`;
 }
