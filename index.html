@@ -50,6 +50,15 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
 .total strong{font-size:28px;color:var(--c1)}
 .vacio{text-align:center;color:#777;padding:30px 0}
 .pronto{text-align:center;color:#888;font-style:italic}
+.cat-titulo{text-align:center;font-size:clamp(30px,4.2vw,50px);margin:0 0 18px;font-weight:700}
+.cat-cab{display:flex;align-items:center;gap:10px;margin:0 0 18px}
+.cat-cab h2{flex:1;margin:0;text-align:center;font-size:clamp(30px,4.2vw,50px);font-weight:700}
+.cat-cab .esp{width:58px;flex:none}
+.carro{position:relative;flex:none;width:58px;height:58px;display:block;border-radius:16px;transition:transform .15s,box-shadow .15s}
+.carro img{width:100%;height:100%;display:block}
+.carro:hover,.carro:focus-visible{transform:translateY(-2px);box-shadow:0 6px 14px rgba(217,72,15,.35)}
+.carro:active{transform:none;box-shadow:none}
+.carro .num-carro{position:absolute;top:-9px;right:-9px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--c1);color:#fff;border:2px solid #fff;font-size:13px;font-weight:700;line-height:20px;text-align:center}
 .marca{text-align:center;font-size:clamp(36px,5vw,60px);margin:50px 0 10px;padding-top:24px;border-top:4px solid var(--c1);color:var(--c1)}
 @media(max-width:600px){.gal{grid-template-columns:1fr}.pila{grid-template-columns:repeat(3,1fr)}.lado{grid-template-columns:1fr}.lado.inv .foto{order:-1}.dos{gap:14px}.fila{padding:20px 0}}
 </style>
@@ -110,7 +119,7 @@ const CATALOGO = {
   ]}
 };
 /* Si ya tienes la página del pedido en Google Sites, pon aquí su dirección para mostrar el botón "Ver mi pedido" */
-const URL_PEDIDO = "";
+const URL_PEDIDO = "https://sites.google.com/view/chucheriasblas/compra";
 /* Nombres anteriores, para que los enlaces ya usados sigan funcionando */
 const ALIAS = { papitas10: "lays_10", papitas15: "lays_15", papitas20: "lays_20", pag2_10: "yummies_10", pag2_15: "yummies_15", pag2_20: "yummies_20", pagina1: "lays", pagina2: "yummies" };
 
@@ -137,6 +146,15 @@ function resumen(pg) {
   <div><span>Costo</span><strong>${fmt(t)}</strong></div></div>
   ${URL_PEDIDO ? `<a class="btn" href="${URL_PEDIDO}" target="_top">Ver mi pedido</a>` : ""}<button class="vaciar" onclick="vaciar(${pg ? "'" + pg + "'" : ""})">Vaciar pedido</button></section>`;
 }
+/* Botón del carrito junto al título de cada categoría: lleva a la página del pedido (URL_PEDIDO) */
+function cabecera(titulo) {
+  if (!URL_PEDIDO) return `<h2 class="cat-titulo">${titulo}</h2>`;
+  const c = leer(); let n = 0; for (const id in c) n += c[id];
+  return `<div class="cat-cab"><span class="esp"></span><h2>${titulo}</h2>
+  <a class="carro" href="${URL_PEDIDO}" target="_top" title="Ir a mi pedido" aria-label="Ir a mi pedido${n ? " (" + n + " paquetes)" : ""}">
+  <img src="fotos/carrito.png" alt="">
+  ${n ? `<span class="num-carro">${n}</span>` : ""}</a></div>`;
+}
 const foto = p => `<div class="foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}">` : ""}</div>`;
 function texto(p, c) {
   const off = p.disponible === false;
@@ -155,7 +173,7 @@ function categoria(k) {
     else { const p = ps[i++]; filas.push(t === "izq" ? `<div class="fila lado">${foto(p)}${texto(p, c)}</div>` : `<div class="fila lado inv">${texto(p, c)}${foto(p)}</div>`); }
   }
   while (i < ps.length) dos();
-  return `<section class="cat"><h2>${cat.titulo}</h2>${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
+  return `<section class="cat">${cabecera(cat.titulo)}${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
 }
 function pedido() {
   const c = leer();
