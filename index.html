@@ -80,6 +80,7 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
 .carro .num-carro{position:absolute;top:-9px;right:-9px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--c1);color:#fff;border:2px solid #fff;font-size:13px;font-weight:700;line-height:20px;text-align:center}
 .marca{text-align:center;font-size:clamp(36px,5vw,60px);margin:50px 0 10px;padding-top:24px;border-top:4px solid var(--c1);color:var(--c1)}
 @media(max-width:600px){.gal{grid-template-columns:1fr}.pila{grid-template-columns:repeat(3,1fr)}.lado{grid-template-columns:1fr}.lado.inv .foto{order:-1}.dos{gap:14px}.fila{padding:20px 0}}
+.cant{width:76px;height:40px;text-align:center;font:inherit;font-size:20px;font-weight:700;border:2px solid var(--c1);border-radius:10px}.grupo-papitas{border:2px solid var(--c1);border-radius:14px;margin:0 0 14px;background:#fff}.grupo-papitas summary{display:flex;justify-content:space-between;gap:12px;cursor:pointer;padding:14px 16px;font-weight:700;font-size:20px}.grupo-papitas summary strong{color:var(--c1)}.tabla-papitas{padding:0 14px 12px}
 </style>
 </head>
 <body>
@@ -100,43 +101,35 @@ body{margin:0;padding:12px 16px;font-family:"Open Sans",Arial,sans-serif;color:v
    ?vista=pedido (pedido completo con el total de TODAS las páginas)  */
 const U = "12 Unidades";
 const CATALOGO = {
-  yummies_10: { pagina: "yummies", titulo: "Papitas de 10", diseno: ["dos", "dos", "dos"], productos: [
-    { id: "q10-palitos",   nombre: "Palitos de Papas", presentacion: U, precio: 100, foto: "fotos/Palito%20de%20Papa.jpg" },
-    { id: "q10-anillito",  nombre: "Anillito",         presentacion: U, precio: 100, foto: "fotos/Anillitos.jpg" },
-    { id: "q10-cappy",     nombre: "Cappy",            presentacion: U, precio: 100, foto: "fotos/Cappy%20de%20queso.jpg" },
-    { id: "q10-cappy-pic", nombre: "Cappy Picante",    presentacion: U, precio: 100, foto: "fotos/Cappy%20Picante.jpg" },
-    { id: "q10-tacos",     nombre: "Tacos de Queso",   presentacion: U, precio: 100, foto: "fotos/Taco%20Queso.jpg" }
-  ]},
-  yummies_15: { pagina: "yummies", titulo: "Papitas de 15", diseno: ["izq"], productos: [
-    { id: "q15-platanito", nombre: "Platanito Zambos", presentacion: U, precio: 150, foto: "fotos/Platanitos.jpg" }
-  ]},
-  yummies_20: { pagina: "yummies", titulo: "Papitas de 20", diseno: ["gal"], productos: [
-    { id: "q20-taqueritos", nombre: "Taqueritos", presentacion: U, precio: 200, foto: "fotos/Taqueritos.jpg", fotos: ["fotos/Taqueritos%20Queso%20Fundido.jpg", "fotos/Taqueritos%20Dragon%20de%20Fuego.jpg", "fotos/Taqueritos%20Dragon%20de%20Hielo.jpg"] }
-  ]},
-  lays_10: { pagina: "lays", titulo: "Papitas de 10", diseno: ["izq", "der", "izq", "dos"], productos: [
-    { id: "p10-chito-rojo",   nombre: "Chito Rojo",   presentacion: U, precio: 105, foto: "fotos/Chito%20Rojo.jpg" },
-    { id: "p10-chito-azul",   nombre: "Chito Azul",   presentacion: U, precio: 105, foto: "fotos/Chito%20Azul.jpg" },
-    { id: "p10-chito-blanco", nombre: "Chito Blanco", presentacion: U, precio: 105, foto: "fotos/Chitos%20Blancos.jpg" },
-    { id: "p10-chito-verde",  nombre: "Chito Verde",  presentacion: U, precio: 105, foto: "fotos/Chito%20Verde.jpg" },
-    { id: "p10-fandango",     nombre: "Fandango",     presentacion: U, precio: 105, foto: "fotos/Fandangos.jpg" }
-  ]},
-  lays_15: { pagina: "lays", titulo: "Papitas de 15", diseno: ["dos", "dos", "dos"], productos: [
-    { id: "p15-hoj-queso",    nombre: "Hojuelitas Queso",    presentacion: U, precio: 155, foto: "fotos/Hojuelita%20de%20Queso.jpg" },
-    { id: "p15-hoj-bbq",      nombre: "Hojuelitas BBQ",      presentacion: U, precio: 155, foto: "fotos/Hojuelitas%20BBQ.jpg" },
-    { id: "p15-hoj-tocineta", nombre: "Hojuelitas Tocineta", presentacion: U, precio: 155, foto: "fotos/Hojuelitas%20Tocinetas.jpg" },
-    { id: "p15-hoj-picante",  nombre: "Hojuelitas Picante",  presentacion: U, precio: 155, foto: "fotos/Hojuelitas%20Picantes.jpg", disponible: false },
-    { id: "p15-dorito-rojo",  nombre: "Dorito Rojo",         presentacion: U, precio: 155, foto: "fotos/Dorito%20Rojo.jpg" },
-    { id: "p15-dorito-negro", nombre: "Dorito Negro",        presentacion: U, precio: 155, foto: "fotos/Dorito%20Negro.jpg" }
-  ]},
-  lays_20: { pagina: "lays", titulo: "Papitas de 20", diseno: ["dos", "izq", "der", "dos"], productos: [
-    { id: "p20-rufles-carne", nombre: "Rufles de Carne", presentacion: U, precio: 210, foto: "fotos/Rufle%20e%20Carne.jpg" },
-    { id: "p20-rufles-queso", nombre: "Rufles de Queso", presentacion: U, precio: 210, foto: "fotos/Rufle%20e%20Queso.jpg" },
-    { id: "p20-lays-queso",   nombre: "Lays Queso",      presentacion: U, precio: 210, foto: "fotos/Lays%20Queso.jpg" },
-    { id: "p20-lays-sal",     nombre: "Lays Sal",        presentacion: U, precio: 210, foto: "fotos/Lay%20Sal.jpg" },
-    { id: "p20-lays-limon",   nombre: "Lays Limón",      presentacion: U, precio: 210, foto: "fotos/Lay%20lemon.jpg" },
-    { id: "p20-lays-cebolla", nombre: "Lays Cebolla",    presentacion: U, precio: 210, foto: "fotos/La%20cebolla.jpg", disponible: false }
-  ]}
+  yummies_10: {"pagina": "yummies", "titulo": "Papitas de 10", "diseno": ["dos", "dos", "dos"], "productos": [{"id": "q10-palitos", "nombre": "Palitos de Papas", "presentacion": "12 Unidades", "precio": 100, "foto": "fotos/Palito%20de%20Papa.jpg"}, {"id": "q10-anillito", "nombre": "Anillito", "presentacion": "12 Unidades", "precio": 100, "foto": "fotos/Anillitos.jpg"}, {"id": "q10-cappy", "nombre": "Cappy", "presentacion": "12 Unidades", "precio": 100, "foto": "fotos/Cappy%20de%20queso.jpg"}, {"id": "q10-cappy-pic", "nombre": "Cappy Picante", "presentacion": "12 Unidades", "precio": 100, "foto": "fotos/Cappy%20Picante.jpg"}, {"id": "q10-tacos", "nombre": "Tacos de Queso", "presentacion": "12 Unidades", "precio": 100, "foto": "fotos/Taco%20Queso.jpg"}]},
+  yummies_15: {"pagina": "yummies", "titulo": "Papitas de 15", "diseno": ["izq"], "productos": [{"id": "q15-platanito", "nombre": "Platanito Zambos", "presentacion": "12 Unidades", "precio": 150, "foto": "fotos/Platanitos.jpg"}]},
+  yummies_20: {"pagina": "yummies", "titulo": "Papitas de 20", "diseno": ["gal"], "productos": [{"id": "q20-taqueritos", "nombre": "Taquerito Picante", "presentacion": "12 Unidades", "precio": 200, "foto": "fotos/Taqueritos.jpg", "fotos": ["fotos/Taqueritos%20Queso%20Fundido.jpg", "fotos/Taqueritos%20Dragon%20de%20Fuego.jpg", "fotos/Taqueritos%20Dragon%20de%20Hielo.jpg"]}]},
+  lays_10: {"pagina": "lays", "titulo": "Papitas de 10", "diseno": ["izq", "der", "izq", "dos"], "productos": [{"id": "p10-chito-rojo", "nombre": "Chito Rojo", "presentacion": "12 Unidades", "precio": 105, "foto": "fotos/Chito%20Rojo.jpg"}, {"id": "p10-chito-azul", "nombre": "Chito Azul", "presentacion": "12 Unidades", "precio": 105, "foto": "fotos/Chito%20Azul.jpg"}, {"id": "p10-chito-blanco", "nombre": "Chito Blanco", "presentacion": "12 Unidades", "precio": 105, "foto": "fotos/Chitos%20Blancos.jpg"}, {"id": "p10-chito-verde", "nombre": "Chito Verde", "presentacion": "12 Unidades", "precio": 105, "foto": "fotos/Chito%20Verde.jpg"}, {"id": "p10-fandango", "nombre": "Fandango", "presentacion": "12 Unidades", "precio": 105, "foto": "fotos/Fandangos.jpg"}]},
+  lays_15: {"pagina": "lays", "titulo": "Papitas de 15", "diseno": ["dos", "dos", "dos"], "productos": [{"id": "p15-hoj-queso", "nombre": "Hojuelitas Queso", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Hojuelita%20de%20Queso.jpg"}, {"id": "p15-hoj-bbq", "nombre": "Hojuelitas BBQ", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Hojuelitas%20BBQ.jpg"}, {"id": "p15-hoj-tocineta", "nombre": "Hojuelitas Tocineta", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Hojuelitas%20Tocinetas.jpg"}, {"id": "p15-hoj-picante", "nombre": "Hojuelitas Picante", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Hojuelitas%20Picantes.jpg", "disponible": false}, {"id": "p15-dorito-rojo", "nombre": "Dorito Rojo", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Dorito%20Rojo.jpg"}, {"id": "p15-dorito-negro", "nombre": "Dorito Negro", "presentacion": "12 Unidades", "precio": 155, "foto": "fotos/Dorito%20Negro.jpg"}, {"id": "p15-dorito-pizza", "nombre": "Dorito Pizza", "presentacion": "12 Unidades", "precio": 155}]},
+  lays_20: {"pagina": "lays", "titulo": "Papitas de 20", "diseno": ["dos", "izq", "der", "dos"], "productos": [{"id": "p20-rufles-carne", "nombre": "Rufles de Carne", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/Rufle%20e%20Carne.jpg"}, {"id": "p20-rufles-queso", "nombre": "Rufles de Queso", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/Rufle%20e%20Queso.jpg"}, {"id": "p20-lays-queso", "nombre": "Lays Queso", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/Lays%20Queso.jpg"}, {"id": "p20-lays-sal", "nombre": "Lays Sal", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/Lay%20Sal.jpg"}, {"id": "p20-lays-limon", "nombre": "Lays Limón", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/Lay%20lemon.jpg"}, {"id": "p20-lays-cebolla", "nombre": "Lays Cebolla", "presentacion": "12 Unidades", "precio": 210, "foto": "fotos/La%20cebolla.jpg", "disponible": false}]},
+  lays_30: {"pagina": "lays", "titulo": "Papitas de 30 y 35", "productos": [{"id": "p30-rufles", "nombre": "Rufles de 30", "precio": 305}, {"id": "p30-dorito", "nombre": "Dorito de 30", "precio": 305}, {"id": "p35-mofongo", "nombre": "Mofongo-Chicharrón de 35", "precio": 355, "disponible": false}, {"id": "p35-platanito", "nombre": "Platanito-Chicharrón de 35", "precio": 355}, {"id": "p35-lays", "nombre": "Lays de 35", "precio": 355}]},
+  galletas_pequenas: {"pagina": "galletas", "titulo": "Galletas Pequeñas", "productos": [{"id": "ga-boom", "nombre": "Galleta Boom", "precio": 100}, {"id": "ga-trio", "nombre": "Galleta Trío 6", "precio": 100}, {"id": "ga-twinni", "nombre": "Galleta Twinni", "precio": 50}, {"id": "ga-princesas", "nombre": "Galletas Princesas", "precio": 60}, {"id": "ga-princesita", "nombre": "Galletas Princesita", "precio": 50}, {"id": "ga-cremica-coco", "nombre": "Cremica de Coco Verde", "precio": 50}, {"id": "ga-cremica-queso", "nombre": "Cremica de Queso", "precio": 100}, {"id": "ga-wafer-guarina", "nombre": "Wafer Guarina", "precio": 80}]},
+  galletas_grandes: {"pagina": "galletas", "titulo": "Galletas Grandes", "productos": [{"id": "gg-dino", "nombre": "Galletas Dino", "precio": 150}, {"id": "gg-hatuey", "nombre": "Galletas Hatuey", "precio": 160}, {"id": "gg-manicoti", "nombre": "Galletas Manicoti", "precio": 140}, {"id": "gg-oylupy", "nombre": "Galletas Oylupy", "precio": 200}, {"id": "gg-ritz", "nombre": "Galletas Ritz", "precio": 200}, {"id": "gg-wafer-tiguer", "nombre": "Wafer Tiguer", "precio": 200}]},
+  chucherias_menor: {"pagina": "chucherias", "titulo": "Chucherías Menor", "productos": [{"id": "cm-clore-azul", "nombre": "Clore Azul (trae 60)", "precio": 200}, {"id": "cm-clores-verdes", "nombre": "Clores Verdes (trae 100)", "precio": 300}, {"id": "cm-ola-bola", "nombre": "Chicle Ola Bola", "precio": 200}, {"id": "cm-yida", "nombre": "Chicle Yida", "presentacion": "30 Unidades", "precio": 250}, {"id": "cm-menta-cristal", "nombre": "Menta Cristal", "precio": 110}, {"id": "cm-menta-candy", "nombre": "Menta Candy", "precio": 200}, {"id": "cm-menta-fiesta", "nombre": "Menta Fiesta", "precio": 180}, {"id": "cm-menta-fruticas", "nombre": "Menta Fruticas", "precio": 160}, {"id": "cm-boligomas", "nombre": "Boligomas", "precio": 100}, {"id": "cm-chalaka", "nombre": "Chalaka Barilete", "presentacion": "40 Unidades", "precio": 160}, {"id": "cm-bianchi-bara", "nombre": "Bianchi Bara", "presentacion": "12 Unidades", "precio": 190}, {"id": "cm-bianchi-menta", "nombre": "Bianchi Menta", "precio": 200}, {"id": "cm-can-can", "nombre": "Can Can", "presentacion": "12 Unidades", "precio": 100}]},
+  chucherias_intermedia: {"pagina": "chucherias", "titulo": "Chucherías Intermedia", "productos": [{"id": "ci-bolon-bimbom", "nombre": "Bolón Bim Bom", "presentacion": "48 Unidades", "precio": 200}, {"id": "ci-bolon-colombina", "nombre": "Bolón Colombina", "presentacion": "48 Unidades", "precio": 200}, {"id": "ci-bolon-willy", "nombre": "Bolón Willy Mix", "presentacion": "48 Unidades", "precio": 190}, {"id": "ci-docigoma", "nombre": "Docigoma Grandes", "precio": 250}, {"id": "ci-hall-azul", "nombre": "Hall Azul", "precio": 170}, {"id": "ci-hall-roja", "nombre": "Hall Roja", "precio": 170}, {"id": "ci-hall-rosada", "nombre": "Hall Rosada", "precio": 170}, {"id": "ci-hall-verde", "nombre": "Hall Verde y Morado", "precio": 170}, {"id": "ci-cofi", "nombre": "Cofi de Lay", "presentacion": "100 Unidades", "precio": 125}, {"id": "ci-mani-azul", "nombre": "Maní Azul", "presentacion": "12 Unidades", "precio": 100}, {"id": "ci-mani-mixto", "nombre": "Maní Mixto", "presentacion": "12 Unidades", "precio": 150}, {"id": "ci-mani-verde", "nombre": "Maní Verde", "presentacion": "12 Unidades", "precio": 100}]},
+  chucherias_mayor: {"pagina": "chucherias", "titulo": "Chucherías Mayor", "productos": [{"id": "cy-masmelo", "nombre": "Masmelo Gigante", "precio": 200}, {"id": "cy-fresita", "nombre": "Fresita XL", "precio": 125}, {"id": "cy-tipitin", "nombre": "Paleta Tipitin", "precio": 80}, {"id": "cy-trululu", "nombre": "Trululu Funda", "precio": 170}]},
+  chucherias_pote: {"pagina": "chucherias", "titulo": "Chucherías Pote", "productos": [{"id": "cp-strveri", "nombre": "Strveri Gummy", "precio": 250}, {"id": "cp-jojo-strsbery", "nombre": "Jojo Jelly Strsbery", "precio": 240}, {"id": "cp-jojo-dracula", "nombre": "Jojo Jelly Drácula", "precio": 330}, {"id": "cp-jojo-figura", "nombre": "Jojo Jelly Figura", "precio": 210}, {"id": "cp-jojo-palito", "nombre": "Jojo Jelly Palito", "precio": 240}, {"id": "cp-jojo-teeth", "nombre": "Jojo Jelly Teeth", "precio": 250}, {"id": "cp-fruyeli", "nombre": "Fruyeli Tarro", "precio": 320}]},
+  consumibles: {"pagina": "consumibles", "titulo": "Consumibles", "productos": [{"id": "co-aceituna", "nombre": "Aceituna Alcaparrado", "precio": 150}, {"id": "co-mayonesa", "nombre": "Mayonesa Sobres", "precio": 115}, {"id": "co-mantequilla", "nombre": "Mantequilla de Sobre", "precio": 145}, {"id": "co-kachu", "nombre": "Kachu Baldón Sobre", "precio": 100}, {"id": "co-sal", "nombre": "Sal Molida", "precio": 300}, {"id": "co-vinagre-marina", "nombre": "Vinagre Marina", "precio": 840}, {"id": "co-cocoa", "nombre": "Cocoa Mune Sobres", "presentacion": "50 Unidades", "precio": 500}, {"id": "co-cigarro", "nombre": "Cigarro Licey", "presentacion": "25 Unidades", "precio": 210}, {"id": "co-tabaco", "nombre": "Tabaco Consuelo", "precio": 180}]},
+  utilidades: {"pagina": "consumibles", "titulo": "Utilidades", "productos": [{"id": "ut-coki", "nombre": "Coki Crube (pegamento)", "precio": 80}, {"id": "ut-funda2", "nombre": "Fundas #2", "precio": 20}, {"id": "ut-funda4", "nombre": "Fundas #4", "precio": 25}, {"id": "ut-funda6", "nombre": "Fundas #6", "precio": 35}, {"id": "ut-funda26", "nombre": "Fundas #26 Rayas", "precio": 100}, {"id": "ut-vela", "nombre": "Vela de Mosquitos", "precio": 35}]},
+  chocolates_caja: {"pagina": "chocolates", "titulo": "Chocolates en Caja", "productos": [{"id": "cc-best-peq", "nombre": "Best Pequeña", "presentacion": "12 Unidades", "precio": 90}, {"id": "cc-conito", "nombre": "Chocolate Conito", "presentacion": "70 Unidades", "precio": 250}, {"id": "cc-roco", "nombre": "Chocolate Roco", "presentacion": "24 Unidades", "precio": 200}]},
+  chocolates_paquete: {"pagina": "chocolates", "titulo": "Chocolates en Paquete", "productos": [{"id": "cq-best-grande", "nombre": "Best Grande", "precio": 150}, {"id": "cq-dale", "nombre": "Chocolate Dale", "precio": 180}, {"id": "cq-nus", "nombre": "Chocolate Nus", "precio": 200}, {"id": "cq-orien", "nombre": "Chocolate Orien Dorado", "precio": 420}, {"id": "cq-snack", "nombre": "Chocolate Snack", "precio": 200}]},
+  bebidas_petit_rica: {"pagina": "bebidas", "titulo": "Bebidas Petit / Rica", "productos": [{"id": "be-rica", "nombre": "Jugo Rica Pequeño", "precio": 580}]},
+  bebidas_malta: {"pagina": "bebidas", "titulo": "Maltas", "productos": [{"id": "bm-india-grande", "nombre": "Malta India Grande (Cristal)", "precio": 960, "frac": true}, {"id": "bm-india-8", "nombre": "Malta India #8 Onza", "precio": 580, "frac": true}, {"id": "bm-tiguebrau", "nombre": "Malta Tiguebrau", "presentacion": "24 Unidades", "precio": 1400, "frac": true}, {"id": "bm-india-familiar", "nombre": "Malta India Familiar", "precio": 950, "disponible": false}, {"id": "bm-12-onzas", "nombre": "Malta de 12 Onzas", "disponible": false}]},
+  bebidas_refrescos: {"pagina": "bebidas", "titulo": "Refrescos", "productos": [{"id": "br-canada-dry", "nombre": "Canada Dry (pedido especial)"}]},
+  juguetes_pequenos: {"pagina": "juguetes", "titulo": "Juguetes Pequeños", "productos": [{"id": "ju-huevo", "nombre": "Huevo Sorpresa Pequeño", "precio": 250}, {"id": "ju-carrito", "nombre": "Carrito Líquido", "presentacion": "24 Unidades", "precio": 200}, {"id": "ju-pizza", "nombre": "Pizza Líquida", "precio": 250}, {"id": "ju-tazo", "nombre": "Tazo de Colores", "precio": 250}]},
+  limpieza_hogar: {"pagina": "limpieza", "titulo": "Limpieza del Hogar", "productos": [{"id": "lh-fabuloso", "nombre": "Fabuloso Sobres", "precio": 150}, {"id": "lh-suavitel-maciel", "nombre": "Suavitel Maciel", "precio": 130}, {"id": "lh-suavitel-sobres", "nombre": "Suavitel Sobres", "precio": 190}, {"id": "lh-bri", "nombre": "Suavizante Bri Mini", "precio": 260}, {"id": "lh-cloro-20", "nombre": "Cloro de 20", "presentacion": "64 Unidades", "precio": 900}, {"id": "lh-cloro-15", "nombre": "Cloro Maciel de 15", "presentacion": "80 Unidades", "precio": 840}]},
+  limpieza_personal: {"pagina": "limpieza", "titulo": "Cuidado Personal", "productos": [{"id": "lp-protex", "nombre": "Jabón Protex", "precio": 50}, {"id": "lp-sunami", "nombre": "Jabón Sunami", "precio": 130}, {"id": "lp-afeitadora", "nombre": "Afeitadora Amarilla", "presentacion": "36 Unidades", "precio": 800}, {"id": "lp-nos-diaria", "nombre": "Nosotras Diaria", "precio": 400}, {"id": "lp-nos-moradas", "nombre": "Nosotras Moradas", "precio": 520}, {"id": "lp-nos-rosadas", "nombre": "Nosotras Rosadas", "precio": 475}, {"id": "lp-gelatina", "nombre": "Gelatina Dady (para el cabello)", "precio": 330}]},
+  especiales_medicamentos: {"pagina": "especiales", "titulo": "Medicamentos", "productos": [{"id": "em-acetaminofen", "nombre": "Acetaminofén", "precio": 250}, {"id": "em-ibuprofeno", "nombre": "Ibuprofeno", "precio": 400}, {"id": "em-omeprazol", "nombre": "Omeprazol", "precio": 300}, {"id": "em-diclofenar", "nombre": "Diclofenar D 100", "precio": 300}, {"id": "em-dicloplefuerte", "nombre": "Dicloplé Forte", "precio": 1300}, {"id": "em-amoxicilina", "nombre": "Amoxicilina 500", "precio": 400}, {"id": "em-ampicilina", "nombre": "Ampicilina 1000", "precio": 800}, {"id": "em-alka-azul", "nombre": "Alka Seltzer Azul", "precio": 1300}, {"id": "em-alka-negro", "nombre": "Alka Seltzer Negro", "precio": 1700}, {"id": "em-antiflude-past", "nombre": "Antiflude Pastilla", "precio": 450}, {"id": "em-antiflude-peq", "nombre": "Antiflude Pequeño", "precio": 500}, {"id": "em-antiflude-forte", "nombre": "Antiflude Forte Pastilla", "precio": 850}, {"id": "em-antiflude-te", "nombre": "Antiflude Té", "precio": 35}, {"id": "em-cardioaspirina", "nombre": "Cardioaspirina", "precio": 720}, {"id": "em-resfridol", "nombre": "Resfridol Antigripal Pastilla", "precio": 900}, {"id": "em-tabcin-noche", "nombre": "Tabcin Noche", "precio": 1300}, {"id": "em-tapcin-dia", "nombre": "Tapcin Día", "precio": 1400}, {"id": "em-algo-amarillo", "nombre": "Algo Amarillo", "precio": 1300}, {"id": "em-algo-limon", "nombre": "Algo Limón", "precio": 1200}, {"id": "em-algo-te", "nombre": "Algo Té Antigripal", "precio": 1300}, {"id": "em-algo-ultra", "nombre": "Algo Ultra", "precio": 1500}, {"id": "em-winasord", "nombre": "Winasord", "precio": 840}]},
+  especiales_alimentos: {"pagina": "especiales", "titulo": "Alimentos y Bebidas", "productos": [{"id": "ea-ace", "nombre": "Ace El Compadre 30 Lb", "precio": 1100}, {"id": "ea-aceite-linda", "nombre": "Aceite Pequeño Linda", "presentacion": "60 Unidades", "precio": 1380, "frac": true}, {"id": "ea-king-pride", "nombre": "King Pride Kanel", "presentacion": "48 Unidades", "precio": 5800, "frac": true}, {"id": "ea-ajo", "nombre": "Ajo en Sobre", "precio": 220}, {"id": "ea-codito", "nombre": "Codito Media Libra", "precio": 20}, {"id": "ea-espagueti", "nombre": "Espagueti 1 Libra", "precio": 40}, {"id": "ea-hab-linda", "nombre": "Habichuela Linda Lata", "precio": 60}, {"id": "ea-hab-roja", "nombre": "Habichuela Roja Linda Lata", "precio": 60}, {"id": "ea-harina", "nombre": "Harina El Negrito", "precio": 35}, {"id": "ea-leche-coco", "nombre": "Leche Coco Mamá", "precio": 70}, {"id": "ea-vinagre-ambar", "nombre": "Vinagre Ámbar", "precio": 25}, {"id": "ea-vainilla", "nombre": "Vainilla de 80", "precio": 560}, {"id": "ea-sardina", "nombre": "Sardina Paco Fish Ovalada", "precio": 100}, {"id": "ea-anejo", "nombre": "Añejo Litro", "precio": 565}, {"id": "ea-brugal-350", "nombre": "Brugal Extra Viejo 350cc", "precio": 310}, {"id": "ea-brugal-medio", "nombre": "Brugal Extraviejo 1/2", "precio": 310}, {"id": "ea-vino", "nombre": "Vino Tinto Campeón Galón", "precio": 515}]},
+  especiales_otros: {"pagina": "especiales", "titulo": "Otros Pedidos Especiales", "productos": [{"id": "eo-muriatico", "nombre": "Ácido Muriático", "precio": 50}, {"id": "eo-alcanfor", "nombre": "Alcanfor", "precio": 600}, {"id": "eo-amoniaco", "nombre": "Amoníaco", "precio": 45}, {"id": "eo-cloro-medio", "nombre": "Cloro 1/2 Galón", "precio": 350}, {"id": "eo-cloro-16", "nombre": "Cloro de 16 Onzas", "precio": 600}, {"id": "eo-gas", "nombre": "Botella de Gas", "precio": 55}, {"id": "eo-911", "nombre": "Energizante 911", "precio": 36}, {"id": "eo-vive", "nombre": "Energizante Vive 100 Pequeño", "precio": 42}]}
 };
+/* Secciones (páginas de Google Sites) en el orden del resumen */
+const PAGINAS = {"lays": "Lays", "yummies": "Yummies", "galletas": "Galletas", "chucherias": "Chucherías", "consumibles": "Consumibles y Utilidades", "chocolates": "Chocolates", "bebidas": "Bebidas", "juguetes": "Juguetes", "limpieza": "Limpieza y Cuidado Personal", "especiales": "Pedidos Especiales"};
 /* Si ya tienes la página del pedido en Google Sites, pon aquí su dirección para mostrar el botón "Ver mi pedido" */
 const URL_PEDIDO = "https://sites.google.com/view/chucheriasblas/compra";
 /* ====== FLUJO DE COMPRA: Pedido -> Formulario -> Resumen final ======
@@ -163,6 +156,8 @@ function leer() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } ca
 function guardar(c) { mem = c; try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} try { bc && bc.postMessage(1); } catch (e) {} }
 function cambiar(id, d) { const c = leer(), n = Math.max(0, (c[id] || 0) + d); if (n) c[id] = n; else delete c[id]; guardar(c); pintar(); }
 /* vaciar("lays") borra solo los productos de esa página; vaciar() borra todo el pedido */
+/* poner(id, valor): escribe la cantidad a mano; se redondea a cuartos (0.25) */
+function poner(id, v) { const n = Math.max(0, Math.round(parseFloat(v) * 4) / 4) || 0, c = leer(); if (n) c[id] = n; else delete c[id]; guardar(c); pintar(); }
 function vaciar(pg) { if (pg) { const c = leer(); for (const id in precios(pg)) delete c[id]; guardar(c); } else guardar({}); pintar(); }
 function precios(pg) { const m = {}; Object.values(CATALOGO).forEach(k => { if (!pg || k.pagina === pg) k.productos.forEach(p => m[p.id] = p.precio); }); return m; }
 /* ---------- VISTAS ---------- */
@@ -188,10 +183,11 @@ function cabecera(titulo) {
 }
 const foto = p => `<div class="foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}">` : ""}</div>`;
 function texto(p, c) {
-  const off = p.disponible === false;
-  return `<div class="txt"><div class="nombre">${p.nombre}</div><div class="dato">${p.presentacion}</div>
-  <div class="dato">Precio: $${p.precio}</div>${off ? `<div class="nd">*No Disponible*</div>` : ""}
-  <div class="ctrl"><button onclick="cambiar('${p.id}',-1)" aria-label="Quitar uno">−</button><b>${c[p.id] || 0}</b><button onclick="cambiar('${p.id}',1)" aria-label="Añadir uno"${off ? " disabled" : ""}>+</button></div></div>`;
+  const off = p.disponible === false, sp = p.precio === undefined, q = c[p.id] || 0, s = p.frac ? 0.25 : 1;
+  const cen = p.frac ? `<input class="cant" type="number" min="0" step="0.25" value="${q}" onchange="poner('${p.id}',this.value)" aria-label="Cantidad">` : `<b>${q}</b>`;
+  return `<div class="txt"><div class="nombre">${p.nombre}</div>${p.presentacion ? `<div class="dato">${p.presentacion}</div>` : ""}
+  <div class="dato">${sp ? "Precio por confirmar" : "Precio: RD$" + p.precio}</div>${off ? `<div class="nd">*No Disponible*</div>` : ""}
+  ${sp ? "" : `<div class="ctrl"><button onclick="cambiar('${p.id}',-${s})" aria-label="Quitar">−</button>${cen}<button onclick="cambiar('${p.id}',${s})" aria-label="Añadir"${off ? " disabled" : ""}>+</button></div>`}</div>`;
 }
 function categoria(k) {
   const cat = CATALOGO[k]; if (!cat) return "";
@@ -207,100 +203,11 @@ function categoria(k) {
   return `<section class="cat">${cabecera(cat.titulo)}${filas.join("") || `<p class="pronto">Próximamente.</p>`}</section>`;
 }
 function pedido(conBoton) {
-  const c = leer();
-
-  const grupos = {
-    "Lays": ["lays_10", "lays_15", "lays_20"],
-    "Yummies": ["yummies_10", "yummies_15", "yummies_20"]
-  };
-
-  let totalGeneral = 0;
-  let cantidadGeneral = 0;
-  let contenido = "";
-
-  for (const marca in grupos) {
-    let subtotalMarca = 0;
-    let cantidadMarca = 0;
-    let filas = "";
-
-    for (const categoria of grupos[marca]) {
-      const grupo = CATALOGO[categoria];
-      if (!grupo) continue;
-
-      for (const p of grupo.productos) {
-        const q = c[p.id] || 0;
-        if (!q) continue;
-
-        const subtotal = q * p.precio;
-        subtotalMarca += subtotal;
-        cantidadMarca += q;
-
-        filas += `
-          <tr>
-            <td>${p.nombre}</td>
-            <td class="num">${q}</td>
-            <td class="num">RD$${p.precio}</td>
-            <td class="num">${fmt(subtotal)}</td>
-          </tr>`;
-      }
-    }
-
-    totalGeneral += subtotalMarca;
-    cantidadGeneral += cantidadMarca;
-
-    if (cantidadMarca > 0) {
-      contenido += `
-        <details class="grupo-papitas">
-          <summary>
-            <span>${marca}</span>
-            <strong>${fmt(subtotalMarca)}</strong>
-          </summary>
-          <div class="tabla-papitas">
-            <table>
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th class="num">Cantidad</th>
-                  <th class="num">Precio</th>
-                  <th class="num">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>${filas}</tbody>
-            </table>
-          </div>
-        </details>`;
-    }
-  }
-
-  const cuerpo = contenido
-    ? `
-      <details class="resumen-papitas" open>
-        <summary>
-          <span>Papitas Lays/Yummies</span>
-          <strong>${fmt(totalGeneral)}</strong>
-        </summary>
-        ${contenido}
-        <button class="vaciar" onclick="vaciar()">Vaciar pedido</button>
-      </details>`
-    : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
-
-  const totalFijo = `
-    <div class="total">
-      <span>Cantidad de Productos<br>
-        <strong>${cantidadGeneral} ${cantidadGeneral === 1 ? "paquete" : "paquetes"}</strong>
-      </span>
-      <span>Costo total<br>
-        <strong>${fmt(totalGeneral)}</strong>
-      </span>
-    </div>`;
-
-  return `<section class="pedido">
-    ${conBoton ? pasos(1) : ""}
-    <h2>Tu pedido</h2>
-    ${cuerpo}
-    ${contenido ? totalFijo : ""}
-    ${conBoton && contenido && URL_FORMULARIO ? `<div class="acciones"><span></span><a class="btn-prim" href="${URL_FORMULARIO}" target="${DESTINO}">Continuar</a></div>` : ""}
-  </section>`;
+  const p = armarPedido();
+  const cuerpo = p.marcas.length ? p.marcas.map(m => `<details class="grupo-papitas"><summary><span>${m.nombre}</span><strong>${fmt(m.sub)}</strong></summary><div class="tabla-papitas"><table><thead><tr><th>Producto</th><th class="num">Cantidad</th><th class="num">Precio</th><th class="num">Subtotal</th></tr></thead><tbody>${m.filas.map(f => `<tr><td>${f.nombre}</td><td class="num">${f.q}</td><td class="num">RD$${f.precio}</td><td class="num">${fmt(f.sub)}</td></tr>`).join("")}</tbody></table></div></details>`).join("") + `<button class="vaciar" onclick="vaciar()">Vaciar pedido</button>` : `<p class="vacio">Todavía no has elegido ningún producto.</p>`;
+  const tot = p.marcas.length ? `<div class="total"><span>Cantidad de Productos<br><strong>${p.cant} ${p.cant === 1 ? "paquete" : "paquetes"}</strong></span><span>Costo total<br><strong>${fmt(p.total)}</strong></span></div>` : "";
+  return `<section class="pedido">${conBoton ? pasos(1) : ""}<h2>Tu pedido</h2>${cuerpo}${tot}
+  ${conBoton && p.marcas.length && URL_FORMULARIO ? `<div class="acciones"><span></span><a class="btn-prim" href="${URL_FORMULARIO}" target="${DESTINO}">Continuar</a></div>` : ""}</section>`;
 }
 
 /* ---------- Pasos del flujo de compra ---------- */
@@ -309,7 +216,7 @@ const pasos = n => `<div class="pasos">${["Pedido", "Formulario", "Confirmar"].m
 /* Arma el pedido por marca. Las categorías se toman solas de CATALOGO (según "pagina"), así que las nuevas se incluyen sin tocar nada */
 function armarPedido() {
   const c = leer(); let total = 0, cant = 0; const marcas = [];
-  for (const [pg, nombre] of [["lays", "Lays"], ["yummies", "Yummies"]]) {
+  for (const [pg, nombre] of Object.entries(PAGINAS)) {
     const filas = []; let sub = 0;
     for (const k of Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === pg))
       for (const p of CATALOGO[k].productos) { const q = c[p.id] || 0; if (q) { filas.push({ nombre: p.nombre, q, precio: p.precio, sub: q * p.precio }); sub += q * p.precio; cant += q; } }
@@ -363,7 +270,7 @@ function pintar() {
     v === "pedido" ? pedido(true) :
     v === "continuar" ? continuar() :
     v === "final" ? final() :
-    v === "todo" ? pedido() + [["lays", "Lays"], ["yummies", "Yummies"]].map(([pg, nombre]) =>
+    v === "todo" ? pedido() + Object.entries(PAGINAS).map(([pg, nombre]) =>
       `<h2 class="marca">${nombre}</h2>` + resumen(pg) + Object.keys(CATALOGO).filter(k => CATALOGO[k].pagina === pg).map(categoria).join("")).join("") :
     dePagina.length ? resumen(v) + dePagina.map(categoria).join("") :
     categoria(v);
